@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+     <title>ChatJS - FrontEnd Magazine - DevMedia</title>
+     <link rel="stylesheet" type="text/css" href="/css/style.css" />
+</head>
+<style>
+    html, body{
+     font-family: Arial, Tahoma, sans-serif;
+     margin: 0;
+     padding: 0;
+}
+body{
+     background:#302F31;
+     padding:10px;
+}
+
+form{
+     margin:15px 0;
+}
+form input[type='text']{
+     border:2px solid #45C5BF;
+     border-radius: 5px;
+     padding:5px;
+     width:75%;
+}
+form input[type='submit']{
+     background: #45C5BF;
+     border:none;
+     border-radius: 5px;
+     color:#FFF;
+     cursor:pointer;
+     font-weight: bold;
+     padding:7px 5px;
+     width:19%;
+}
+#historico_mensagens{
+     background: #FFF;
+     border:2px solid #45C5BF;
+     height: 550px;
+}
+</style>
+
+<body>
+     <div id="historico_mensagens"></div>
+     <form id="chat">
+         <input type='text' id='texto_mensagem' name='texto_mensagem' />
+         <input type='submit' value='Enviar mensagem!' />
+     </form>
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script type="text/javascript" src="/socket.io/socket.io.js"></script>
+<script type="text/javascript">
+    var socket = io.connect();
+
+    $("#chat").submit(function(e){
+        console.log("oi")
+         e.preventDefault();
+         socket.emit("enviar mensagem", $(this).find("#texto_mensagem").val(), function(){
+              $("form#chat #texto_mensagem").val("");
+         });
+    });
+
+    socket.on("atualizar mensagens", function(mensagem){
+    var mensagem_formatada = $("<p />").text(mensagem);
+        $("#historico_mensagens").append(mensagem_formatada);
+    });
+
+</script>
+</html>
